@@ -1,0 +1,51 @@
+{
+  "name": "@mark-image/vue",
+  "version": "0.1.0",
+  "description": "Vue 2 image annotation canvas: pen, rect, circle, zoom, pan and rotate.",
+  "main": "dist/mark-image.common.js",
+  "module": "dist/mark-image.umd.js",
+  "unpkg": "dist/mark-image.umd.min.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build --target lib --name mark-image src/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "vue",
+    "vue2",
+    "annotation",
+    "image",
+    "fabric",
+    "canvas",
+    "mark-image"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "fabric": "^4.5.0",
+    "vue": "^2.6.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@vue/cli-plugin-babel": "^4.5.19",
+    "@vue/cli-service": "^4.5.19",
+    "core-js": "^3.6.5",
+    "fabric": "^4.6.0",
+    "less": "^3.13.1",
+    "less-loader": "^5.0.0",
+    "vue": "2.6.14",
+    "vue-template-compiler": "2.6.14"
+  }
+}
