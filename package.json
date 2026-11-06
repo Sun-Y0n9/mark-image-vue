@@ -1,6 +1,6 @@
 {
   "name": "@mark-image/vue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue 2 image annotation canvas: pen, rect, circle, zoom, pan and rotate.",
   "main": "dist/mark-image.common.js",
   "module": "dist/mark-image.umd.js",
@@ -27,7 +27,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/Sun-Y0n9/mark-image-vue.git"
   },
   "publishConfig": {
     "access": "public"
