@@ -207,7 +207,8 @@ export default {
   name: 'AnnotationCanvas',
   props: {
     imageUrl: { type: String, required: true },
-    storageKey: { type: String, required: true },
+    /** 画布标识。同一页多个实例需互不相同，并写入默认导出文件名 */
+    canvasId: { type: String, required: true },
     initialAnnotateList: { type: Array, default: () => [] },
     /** 已提交标注（Fabric objects 结构，用于编辑回显） */
     initialStoredPayload: { type: Object, default: null },
@@ -1034,6 +1035,34 @@ export default {
     getAnnotationJson () {
       return this.getAnnotationPayload()
     },
+    /**
+     * 把 getAnnotationJson() 的结果画到当前图片上。
+     * 也可传入 objects 数组或 JSON 字符串。图片尚未就绪时返回 false。
+     */
+    loadAnnotationJson (payload) {
+      if (!this.canvas) return false
+      let data = payload
+      if (typeof data === 'string') {
+        try {
+          data = JSON.parse(data)
+        } catch (error) {
+          return false
+        }
+      }
+      const objects = Array.isArray(data)
+        ? data
+        : (data && Array.isArray(data.objects) ? data.objects : null)
+      if (!objects) return false
+      if (!objects.length) {
+        this.canvas.getObjects().slice().forEach(object => this.canvas.remove(object))
+        this.canvas.renderAll()
+        this.captureBaseline()
+        this.syncUnsavedState()
+        return true
+      }
+      this.loadFabricObjects(objects)
+      return true
+    },
     /** 获取标注后图片 dataURL */
     getAnnotatedImageDataURL (options = {}) {
       if (!this.canvas) return ''
@@ -1055,7 +1084,7 @@ export default {
     getAnnotatedImageFile (filename, options = {}) {
       const blob = this.getAnnotatedImageBlob(options)
       const ext = (options.type || this.imageType) === 'jpeg' ? 'jpg' : 'png'
-      const name = filename || `annotation-${this.storageKey || 'image'}.${ext}`
+      const name = filename || `annotation-${this.canvasId || 'image'}.${ext}`
       return blobToFile(blob, name)
     },
     /** 按当前 saveMode 导出：json 或图片 */
@@ -1075,7 +1104,7 @@ export default {
       const blob = dataURLToBlob(dataURL)
       const file = blobToFile(
         blob,
-        options.filename || `annotation-${this.storageKey || 'image'}.${(options.type || this.imageType) === 'jpeg' ? 'jpg' : 'png'}`
+        options.filename || `annotation-${this.canvasId || 'image'}.${(options.type || this.imageType) === 'jpeg' ? 'jpg' : 'png'}`
       )
       return {
         mode: 'image',

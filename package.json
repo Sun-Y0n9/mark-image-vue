@@ -1,6 +1,6 @@
 {
   "name": "@mark-image/vue",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Vue 2 image annotation canvas: pen, rect, circle, zoom, pan and rotate.",
   "main": "dist/mark-image.common.js",
   "module": "dist/mark-image.umd.js",

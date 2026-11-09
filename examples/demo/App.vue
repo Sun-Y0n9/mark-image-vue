@@ -28,6 +28,7 @@
       </div>
       <div class="demo-actions">
         <button type="button" @click="exportPayload">获取标注 JSON</button>
+        <button type="button" @click="loadDemoJson">加载标注 JSON</button>
         <button type="button" @click="exportImage">获取标注图片</button>
         <label class="file-btn">
           更换图片
@@ -41,7 +42,7 @@
       <annotation-canvas
         ref="canvas"
         :image-url="imageUrl"
-        storage-key="demo-mark-image"
+        canvas-id="demo-mark-image"
         page-label="演示影像"
         toolbar-position="bottom"
         :editable="true"
@@ -62,11 +63,13 @@
         @message="onMessage"
       />
     </div>
+    <div v-if="toast" class="demo-toast" :class="'is-' + toast.type">{{ toast.text }}</div>
   </div>
 </template>
 
 <script>
 import demoImage from './demp.jpg'
+import demoMarkJson from './demoMarkJson.json'
 
 const ALL_COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#ffffff']
 
@@ -77,6 +80,7 @@ export default {
       imageUrl: demoImage,
       exported: '',
       hint: '',
+      toast: null,
       saveMode: 'json',
       colors: ALL_COLORS.slice(),
       toolPen: true,
@@ -120,6 +124,23 @@ export default {
       this.exported = JSON.stringify(json, null, 2)
       this.hint = '已获取标注 JSON'
     },
+    loadDemoJson () {
+      const canvas = this.$refs.canvas
+      const ok = canvas && canvas.loadAnnotationJson(demoMarkJson)
+      if (!ok) {
+        this.showToast('加载标注 JSON 失败', 'error')
+        return
+      }
+      this.exported = ''
+      this.showToast('已加载标注 JSON')
+    },
+    showToast (text, type = 'success') {
+      this.toast = { text, type }
+      clearTimeout(this.toastTimer)
+      this.toastTimer = setTimeout(() => {
+        this.toast = null
+      }, 1800)
+    },
     exportImage () {
       const file = this.$refs.canvas && this.$refs.canvas.getAnnotatedImageFile('demo-annotated.png')
       if (!file) {
@@ -160,6 +181,9 @@ export default {
       this.imageUrl = URL.createObjectURL(file)
       this.exported = ''
     }
+  },
+  beforeDestroy () {
+    clearTimeout(this.toastTimer)
   }
 }
 </script>
@@ -238,6 +262,26 @@ body,
   margin: 8px 0 0;
   color: #4caf7d;
   font-size: 13px;
+}
+
+.demo-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  z-index: 20;
+  transform: translateX(-50%);
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #173528;
+  color: #b7ebc6;
+  font-size: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.demo-toast.is-error {
+  background: #3a2224;
+  color: #f5c2c0;
 }
 
 .demo-actions {
