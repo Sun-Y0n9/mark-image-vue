@@ -6,6 +6,8 @@ Vue 2 image annotation component. Draw with a pen, rectangles, and circles on an
 
 Dependencies: `vue@2`, `fabric@4`.
 
+Live demo: https://sun-y0n9.github.io/mark-image-vue/
+
 ## Features
 
 - Pen, rectangle, and circle (each can be enabled as needed)

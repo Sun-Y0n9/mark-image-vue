@@ -1,11 +1,22 @@
 const isLib = process.argv.includes('lib')
+const isDemo = process.env.npm_lifecycle_event === 'build:demo'
 
 module.exports = {
+  publicPath: isDemo ? '/mark-image-vue/' : '/',
   css: {
     extract: false
   },
   pages: isLib
     ? undefined
+    : isDemo
+    ? {
+      index: {
+        entry: 'examples/demo/main.js',
+        template: 'examples/demo/index.html',
+        filename: 'index.html',
+        title: '@mark-image/vue demo'
+      }
+    }
     : {
       index: {
         entry: 'examples/demo/main.js',
