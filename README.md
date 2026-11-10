@@ -8,6 +8,8 @@ Vue 2 图片标注组件。在图片上用铅笔、方框、圆圈做标注，�
 
 在线体验：https://sun-y0n9.github.io/mark-image-vue/
 
+`@mark-image/vue3` 在线体验：https://sun-y0n9.github.io/mark-image-vue3/
+
 ## 功能
 
 - 铅笔、方框、圆圈（可按需启用）
